@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment - Career Compass</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+    <style>
+        /* CSS for the question box */
+        .question-box {
+            background-color: #e0f7fa; /* A very light blue */
+            border: 1px solid #b2ebf2; /* A slightly darker blue border */
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        /* CSS for the form actions container */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* CSS for the loading bar */
+        #loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0;
+            background-color: #3498db; /* Blue color for the loading bar */
+            z-index: 1000;
+            transition: width 12s linear;
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- The loading bar element, initially hidden -->
+    <div id="loading-bar"></div>
+
+    <div class="container">
+        <h1>🎓 Career Compass Assessment</h1>
+        <p>👋 Welcome to the Career Strength Snapshot!</p>
+        <p>You’ll be presented with pairs of statements (two per question). Each pair contains two options that may both feel true — however, your task is to choose the one that best reflects your natural preferences, behaviors, or instincts.</p>
+        <p>There are no right or wrong answers. Simply pick the option that you identify with more.</p>
+        <p class="page-indicator">Page {{ page_num }} of {{ total_pages }}</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/assessment/{{ page_num }}" method="post" onsubmit="return handleFormSubmission();">
+            {% for question_text in questions %}
+                <div class="question-box">
+                    {% set global_question_index = ((page_num - 1) * 12) + loop.index - 1 %}
+                    <p>{{ global_question_index + 1 }}. Which statement feels more like you?</p>
+                    <div class="radio-group">
+                        {% set options = question_text.split('\n') %}
+                        {% for option in options %}
+                            {% if option.strip() %}
+                                {% set option_char = option.strip()[0] %}
+                                <label style="display: block; margin-bottom: 0.5em;">
+                                    <input type="radio" name="q{{ global_question_index }}" value="{{ option_char }}" required
+                                    {% if session.get('assessment_answers', {}).get(global_question_index | string) == option_char %}checked{% endif %}>
+                                    {{ option | safe }}
+                                </label>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="form-actions">
+                {% if page_num > 1 %}
+                    <button href="/assessment/{{ page_num - 1 }}" class="button button-secondary">Previous Page</button>
+                {% endif %}
+
+                {% if page_num < total_pages %}
+                    <button type="submit" class="button button-primary">Next Page</button>
+                {% else %}
+                    <button type="submit" class="button button-primary">Submit Assessment</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function handleFormSubmission() {
+            const isFinalPage = {{ page_num }} === {{ total_pages }};
+            if (isFinalPage) {
+                const loadingBar = document.getElementById('loading-bar');
+                loadingBar.style.width = '100%';
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

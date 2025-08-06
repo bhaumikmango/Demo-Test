@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Guidance Preferences</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <h2>Let’s Get to Know You!</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="/preferences" class="form-box">
+
+            <label for="graduation_subjects">High School Subjects/12th Standard Subjects(comma-separated):</label>
+            <input type="text" id="graduation_subjects" name="graduation_subjects" placeholder="e.g. English, Economics, Chemistry" required>
+
+            <label for="preferred_field">Preferred Career Field (optional):</label>
+            <input type="text" id="preferred_field" name="preferred_field" placeholder="e.g. Political Diplomacy">
+
+            <button type="submit" class="button button-primary">Start Assessment</button>
+        </form>
+    </div>
+</body>
+</html>

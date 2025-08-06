@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Career Guidance Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+  <div class="container">
+    <h2>✅ Your Personalized Career Guidance</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    
+    <!-- New Section for MBTI Personality Analysis -->
+    <div class="result-section">
+      <h3>MBTI Personality Analysis:</h3>
+      {% if mbti_result %}
+        <div class="career-list">
+          <h4>Personality Type: {{ mbti_result.type }}</h4>
+          <p>{{ mbti_explanation | safe }}</p>
+          
+          <div class="traits-container">
+            <div class="trait-box">
+              <h5>Strengths:</h5>
+              <ul>
+                {% for strength in mbti_result.strengths %}
+                  <li>{{ strength }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="trait-box">
+              <h5>Weakenesses:</h5>
+              <ul>
+                {% for weakness in mbti_result.weaknesses %}
+                  <li>{{ weakness }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p>No personality analysis available.</p>
+      {% endif %}
+    </div>
+
+    <div class="result-section">
+      <h3>Recommended Career Alignments:</h3>
+      {% if career_alignments %}
+        <ol class="career-list">
+          {% for career in career_alignments %}
+            <li>
+              <h4>{{ career.name }} ({{ career.match_score|round(1) }}% Match)</h4>
+              <p>{{ career.explanation | safe }}</p>
+              <h5>Key Steps:</h5>
+              <ul>
+                <li><strong>Competitive Exams:</strong> {{ career.competitive_exams|join(', ') }}</li>
+                <li><strong>Degree Courses:</strong> {{ career.degree_courses|join(', ') }}</li>
+              </ul>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p>No career alignments found. Please ensure you complete the assessment.</p>
+      {% endif %}
+    </div>
+
+    <div class="suggestion-section">
+      <h3>Clarity and Impact:</h3>
+      {% if clarity_and_impact %}
+        <div class="suggestion-content">
+          {{ clarity_and_impact | safe }}
+        </div>
+      {% else %}
+        <p>No clarity and impact summary available.</p>
+      {% endif %}
+    </div>
+
+    <div class="suggestion-section">
+      <h3>Disclaimer:</h3>
+      {% if disclaimer %}
+        <div class="suggestion-content">
+          {{ disclaimer | safe }}
+        </div>
+      {% else %}
+        <p>Disclaimer not available.</p>
+      {% endif %}
+    </div>
+
+    <div class="button-group">
+      <form action="/download" method="post" style="display:inline;">
+        <input type="hidden" name="raw_suggestion_data" value="{{ raw_suggestion_plain_text }}">
+        <button type="submit" class="button button-primary">Download as PDF</button>
+      </form>
+    </div>
+
+  </div>
+</body>
+</html>

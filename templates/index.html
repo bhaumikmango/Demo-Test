@@ -1,1 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Compass</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  <style>
+    /* Additional styles for the new blocks to enhance presentability */
+    .hero-section {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(to right, #e0f2f7, #c1e4ed); /* Lighter, more inviting gradient */
+      border-radius: 18px;
+      margin-bottom: 3rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .hero-section h1 {
+      font-size: 3.5rem;
+      color: #0a58ca;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    .hero-section p {
+      font-size: 1.3rem;
+      color: #444;
+      max-width: 700px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .feature-card {
+      background-color: #ffffff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    .feature-card h3 {
+      font-size: 1.5rem;
+      color: #2d3e50;
+      margin-bottom: 1rem;
+    }
+    .feature-card p {
+      color: #555;
+      line-height: 1.5;
+    }
+    .feature-card .icon {
+      font-size: 3rem; /* Larger icons */
+      margin-bottom: 1rem;
+      color: #0a58ca; /* Blue color for icons */
+    }
+    .footer-note {
+      text-align: center;
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    .footer-note span {
+      display: block;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body class="centered-page">
 
+  <div class="container">
+    <img src="https://aurigence.vercel.app/Aurigence%20logo%20without%20background.png" alt="Aurigence Logo" style="width: 200px; height: 155px; display: block; margin: 0 auto;">
+    <header class="hero-section">
+      <h1>Career Compass</h1>
+      <p>Your Future, Trained by Professionals, Powered by AI. Your personalized journey to discovering the right career starts here. Uncover your potential with AI-driven insights tailored just for you.</p>
+      <a href="{{ url_for('preferences') }}" class="button button-primary">Start Your Personalized Test →</a>
+    </header>
+
+    <section class="info-section">
+      <h2>✨ What We Offer</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="icon">🧠</span>
+          <h3>Deep Personality Analysis</h3>
+          <p>Understand your strengths and preferences with our comprehensive MBTI-inspired assessment.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🔭</span>
+          <h3>Future-Focused Guidance</h3>
+          <p>Align your aspirations with career paths that truly resonate with your long-term goals.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">💡</span>
+          <h3>Personalized Learning Insights</h3>
+          <p>Discover your optimal learning style to make your educational journey more effective.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🎯</span>
+          <h3>Aptitude & Interest Mapping</h3>
+          <p>Identify fields where your natural talents and passions can truly shine.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h2>🚀 Why Choose Career Compass?</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Data-Driven Decisions</h3>
+          <p>Our AI analyzes multiple facets of your profile to provide holistic and actionable career advice.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Comprehensive Reports</h3>
+          <p>Get a detailed breakdown of your assessment results and personalized career suggestions, downloadable as PDF.</p>
+        </div>
+        <div class="feature-card">
+          <h3>User-Friendly Experience</h3>
+          <p>Navigate through assessments effortlessly with our intuitive and clean interface.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-note">
+      <small>Built by Bhaumik Yadav</small>
+      <br>
+      <small>Powered by AI</small>
+    </footer>
+  </div>
+
+</body>
+</html>
