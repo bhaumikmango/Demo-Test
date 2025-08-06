@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: career-compass
+    env: python
+    dockerfilePath: Dockerfile
+    buildCommand: pip install -r requirements.txt 
+    startCommand: gunicorn --bind 0.0.0.0:8000 app:app
+    envVars:
+      # These are placeholders; you will set their actual values in Render dashboard
+      - key: SECRET_KEY
+        sync: false 
+      - key: GEMINI_API_KEY
+        sync: false
+    pullRequestPreviewsEnabled: true

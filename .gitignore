@@ -1,0 +1,47 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env
+*.env
+
+# macOS-specific
+.DS_Store
+
+# Flask instance and cache
+instance/
+*.db
+*.sqlite3
+
+# Virtual environments
+venv/
+.venv/
+env/
+.envrc
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and local debug output
+*.log
+
+# Python egg info
+*.egg-info/
+dist/
+build/
+
+# PDF result downloads (if saved locally)
+downloads/
+*.pdf
+
+# Render or deployment-specific (optional)
+*.tar.gz
+*.bak
+
+# OS files
+Thumbs.db
