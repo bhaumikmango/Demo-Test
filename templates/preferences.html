@@ -20,6 +20,9 @@
         {% endwith %}
         <form method="POST" action="/preferences" class="form-box">
 
+            <label for="student_name">Your Name:</label>
+            <input type="text" id="student_name" name="student_name" placeholder="e.g. John Doe" required>
+
             <label for="graduation_subjects">High School Subjects/12th Standard Subjects(comma-separated):</label>
             <input type="text" id="graduation_subjects" name="graduation_subjects" placeholder="e.g. English, Economics, Chemistry" required>
 

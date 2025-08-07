@@ -19,8 +19,20 @@
         </div>
       {% endif %}
     {% endwith %}
+
+    <div class="info-block">
+      <p>We extend our heartfelt appreciation for your active participation in our psychometric assessment designed to evaluate engineering potential. Your thoughtful responses have significantly contributed to the creation of this comprehensive report, aimed at assessing your alignment with a future in engineering.</p>
+      <p>As you embark on this journey of self-discovery and academic exploration, we invite you to engage deeply with the insights presented in the following pages. This report offers a detailed analysis of your inherent strengths, preferences, and aptitudes — serving as a personalized guide to help you make informed decisions about pursuing engineering as a potential career path. We encourage you to read the report in its entirety, as each section offers a valuable perspective that contributes to a well-rounded understanding of your suitability for the field.</p>
+      <p><b>Dear {{ student_name }},</b></p>
+      <p>Choosing a college major or academic discipline is often a complex and overwhelming decision, frequently influenced by external pressures such as job market trends, career prospects, and societal expectations. While seeking advice from parents, educators, and peers is a natural and often helpful step, it is equally important to reflect inward — to understand your own capabilities, interests, and aspirations.</p>
+      <p>Can we enhance our decision-making process by gaining clarity about ourselves? Are we aware of how our personal strengths and interests align with the unique demands of different academic fields?</p>
+      <p>Thriving in any discipline, especially engineering, requires a distinctive set of cognitive abilities — including logical reasoning, critical thinking, mathematical aptitude, and problem-solving skills. Each individual possesses a unique profile of abilities — some innate, others cultivated through experience and learning.</p>
+      <p>What if there were a structured and objective way to evaluate how well your natural strengths align with the demands of engineering? This report strives to do precisely that — to provide personalized, evidence-based insights to support your academic and career planning.</p>
+      <p><b>Disclaimer:</b> This psychometric assessment has been developed with the intention of guiding students in evaluating their suitability for engineering studies. The analysis is based on your individual responses to scenario-based questions and should be viewed as one of several tools in your decision-making toolkit. We advise against relying solely on this report and recommend consulting with career counselors or academic advisors for additional perspective. Please refer to the terms and conditions section at the end of this report for further clarification.</p>
+      <p><b>Important Note:</b> This assessment specifically focuses on alignment with engineering disciplines. A result indicating a lower alignment does not imply an absence of potential or talent in other fields. Your strengths may lie in domains not covered by this evaluation. We urge you to interpret your results within the context of engineering suitability while remaining open to exploring a broad spectrum of academic and career opportunities.</p>
+      <p><b>Intended Audience:</b> This report is most beneficial for students who are in the process of selecting their undergraduate field of study, parents guiding their children through college decisions, and individuals preparing for engineering admission counseling or considering engineering as a future course of study.</p>
+    </div>
     
-    <!-- New Section for MBTI Personality Analysis -->
     <div class="result-section">
       <h3>MBTI Personality Analysis:</h3>
       {% if mbti_result %}
@@ -38,7 +50,7 @@
               </ul>
             </div>
             <div class="trait-box">
-              <h5>Weakenesses:</h5>
+              <h5>Weaknesses:</h5> {# Corrected typo from "Weakeness" #}
               <ul>
                 {% for weakness in mbti_result.weaknesses %}
                   <li>{{ weakness }}</li>
@@ -93,6 +105,24 @@
       {% else %}
         <p>Disclaimer not available.</p>
       {% endif %}
+    </div>
+
+    <div class="info-block">
+      <h3>About the Methodology</h3>
+      <p>This assessment is grounded in a personality-driven framework. Your responses have been analyzed using associative techniques that map your answers to a defined set of personality traits. These traits are then correlated with specific factors relevant to your academic and career alignment.</p>
+      <p>It is important to recognize that, like any psychometric instrument, a degree of subjectivity and a margin of error may be present. Factors such as the test environment, individual context, and the ever-evolving landscape of education can influence results. To ensure relevance and accuracy, the assessment framework is regularly updated and refined in line with emerging academic standards and technological advancements.</p>
+      <p>The test design incorporates significant contributions from generative AI, which supports the creation, validation, and enhancement of content in accordance with psychometric best practices for reliability and validity.</p>
+
+      <h3>Terms & Conditions</h3>
+      <p><strong>Disclaimer of Outcome:</strong> This assessment is intended solely for informational and guidance purposes. It does not guarantee specific academic, professional, or personal outcomes. The organization does not warrant the accuracy, completeness, or reliability of the information presented in the assessment.</p>
+      <p><strong>Decision-Making Responsibility:</strong> Any actions or decisions taken based on this report are entirely the responsibility of the individual participant. The organization bears no responsibility for any direct or indirect consequences resulting from decisions made based on the assessment.</p>
+      <p><strong>Limitation of Liability:</strong> Under no circumstances shall the organization be held liable for any direct, indirect, incidental, consequential, or special damages arising from the use or interpretation of the assessment results.</p>
+      <p><strong>Indemnification:</strong> By participating in this assessment, you agree to indemnify and hold harmless the organization and its representatives (including officers, employees, and agents) from any claims or liabilities that may arise due to your decisions or actions based on the assessment findings.</p>
+      <p><strong>Scope of Liability:</strong> To the fullest extent permitted by applicable law, the organization's liability in relation to this assessment is strictly limited to the amount paid, if any, for access to the assessment.</p>
+      <p><strong>AI-Assisted Design:</strong> The assessment’s content and structure have been significantly informed by generative AI technologies. All prompts and processes used adhere to the foundational standards of reliability and validity as required in psychometric assessments.</p>
+      <p><strong>Not a Substitute for Professional Advice:</strong> This assessment is not intended to replace expert guidance. Participants are encouraged to consult qualified academic or career professionals before making significant decisions based on the results.</p>
+      <p><strong>Subject to Change:</strong> The organization reserves the right to update, modify, suspend, or terminate the assessment or its features at any time, without prior notification.</p>
+      <p><strong>Acknowledgement & Consent:</strong> By undertaking this assessment, you acknowledge that your participation is voluntary and that you accept all the terms and conditions stated herein.</p>
     </div>
 
     <div class="button-group">
