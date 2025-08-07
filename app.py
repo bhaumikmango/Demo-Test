@@ -150,8 +150,8 @@ def get_trait_summary(user_answers):
     
     return dict(trait_counts)
 
-# --- Pydantic Models for Data Validation (UPDATED) ---
-# This new model reflects the MBTI output from the AI.
+# --- Pydantic Models for Data Validation ---
+# This model reflects the MBTI output from the AI.
 class MbtiResultModel(BaseModel):
     type: str
     explanation: str
@@ -166,7 +166,7 @@ class CareerDetail(BaseModel):
     degree_courses: List[str]
 
 class FinalSuggestionModel(BaseModel):
-    mbti_result: MbtiResultModel  # New field for MBTI result
+    mbti_result: MbtiResultModel  
     career_alignments: List[CareerDetail] # Note: The prompt now requests exactly 8 careers.
     clarity_and_impact: str
     disclaimer: str
@@ -370,6 +370,8 @@ A) I enjoy competing and setting high personal goals.
 B) I enjoy collaborating on team projects and celebrating shared wins.
 """
 
+student_name = ''
+
 def get_paged_questions(page_num, questions_per_page=12):
     questions_list = ASSESSMENT_QUESTIONS_RAW.strip().split('\n\n')
     start_index = (page_num - 1) * questions_per_page
@@ -383,21 +385,16 @@ def index():
 @app.route('/preferences', methods=['GET', 'POST'])
 def preferences():
     if request.method == 'POST':
-        # Clear previous session data to start fresh
         session.clear()
-        
-        # --- MODIFIED: Store preferences in the session from the form data and hardcoded values ---
+        session['student_name'] = request.form['student_name']
         session['graduation_subjects'] = request.form['graduation_subjects']
         session['preferred_field'] = request.form.get('preferred_field', 'None specified')
         session['country'] = 'India'
         session['tone'] = 'Professional'
-        # --- END MODIFIED ---
         
         flash('Preferences saved. Starting assessment.', 'success')
         return redirect('/assessment/1')
 
-    # For GET request, render the preferences form
-    # Note: Config.RESPONSE_TONES is no longer needed in the template
     return render_template('preferences.html')
 
 @app.route('/assessment/<int:page_num>', methods=['GET', 'POST'])
@@ -447,53 +444,19 @@ def result():
 
     session_data = get_session_data(session_id)
     
-    # --- UPDATED: Calculate top traits dynamically from user answers ---
-    user_answers = session_data.get('assessment_answers', {})
-    
-    if user_answers:
-        # Calculate top 5 traits based on actual user responses
-        calculated_traits = calculate_top_traits(user_answers, top_n=5)
-        
-        # Format traits for better display
-        top_traits = calculated_traits if calculated_traits else [
-            "Creative and Adaptable",
-            "Analytical and Structured"
-        ]
-        
-        # Debug: Print trait analysis for development
-        trait_summary = get_trait_summary(user_answers)
-        print(f"DEBUG: User trait analysis: {trait_summary}")
-        print(f"DEBUG: Top 5 traits: {top_traits}")
-        
-    else:
-        # Fallback to default traits if no answers found
-        top_traits = [
-            "Creative and Adaptable",
-            "Analytical and Structured"
-        ]
-        print("DEBUG: Using fallback traits - no user answers found")
-    # --- END UPDATED ---
-    
-    # Check if the AI suggestion has already been generated
     if not session_data.get('suggestion_data'):
         try:
-            # Generate the prompt for the AI
             prompt = generate_prompt(session_data)
             retries = 0
-            # Implement exponential backoff for retries
             while retries < 3:
                 try:
-                    # Make the API call, requesting JSON output
                     response = genai.GenerativeModel('gemini-2.0-flash').generate_content(
                         prompt,
                         generation_config={"response_mime_type": "application/json"}
                     )
                     suggestion_json_string = response.candidates[0].content.parts[0].text
-                    # Validate the JSON with Pydantic
                     suggestion_data_model = FinalSuggestionModel.model_validate_json(suggestion_json_string)
-                    # Convert validated model to a dictionary and save to session
                     session['suggestion_data'] = suggestion_data_model.model_dump()
-                    # Store the raw, pretty-printed JSON for the download function
                     session['raw_suggestion_plain_text'] = json.dumps(session['suggestion_data'], indent=2)
                     save_session_data(session_id, dict(session))
                     break
@@ -509,53 +472,47 @@ def result():
             flash("An error occurred while generating your results. Please try again.", 'danger')
             return redirect('/preferences')
     
-    # Use the data from the session
     suggestion_data = session.get('suggestion_data', {})
-    
-    # The career alignments list is retrieved from the validated data
     career_alignments = suggestion_data.get('career_alignments', [])
-    
-    # --- UPDATED: Retrieve the new MBTI result from the session data ---
     mbti_result = suggestion_data.get('mbti_result', {})
-    # --- END UPDATED ---
     
-    # Convert markdown fields to HTML for safe rendering in the template
+    top_traits = [
+        "Creative and Adaptable",
+        "Analytical and Structured",
+    ]
+    
     mbti_explanation = markdown.markdown(mbti_result.get('explanation', ''), extensions=['nl2br'])
-    
     clarity_and_impact = markdown.markdown(suggestion_data.get('clarity_and_impact', ''), extensions=['nl2br'])
     disclaimer = markdown.markdown(suggestion_data.get('disclaimer', ''), extensions=['nl2br'])
     
-    # Store the raw data for the download function
     raw_suggestion_plain_text = session.get('raw_suggestion_plain_text', '')
+
+    global student_name 
+    student_name = session_data.get('student_name', 'Student')
 
     return render_template(
         'result.html',
-        top_traits=top_traits, # Now dynamically calculated based on user answers
+        top_traits=top_traits,
         career_alignments=career_alignments,
         clarity_and_impact=clarity_and_impact,
         disclaimer=disclaimer,
-        # --- UPDATED: Pass the new MBTI data to the template ---
         mbti_result=mbti_result,
         mbti_explanation=mbti_explanation,
-        # --- END UPDATED ---
-        raw_suggestion_plain_text=raw_suggestion_plain_text
+        raw_suggestion_plain_text=raw_suggestion_plain_text,
+        student_name=student_name
     )
 
 @app.route('/download', methods=['POST'])
 def download():
-    # Fetch the raw JSON data from the form
+
     raw_suggestion_data = request.form.get('raw_suggestion_data')
     if not raw_suggestion_data:
         flash("No results to download.", 'warning')
         return redirect('/result')
 
-    # Parse the JSON string
     try:
         suggestion_data = json.loads(raw_suggestion_data)
-        # Use Pydantic to re-validate the data before using it
-        # --- UPDATED: Use the new FinalSuggestionModel with MBTI data ---
         validated_data = FinalSuggestionModel.model_validate(suggestion_data)
-        # --- END UPDATED ---
         
         mbti_result = validated_data.mbti_result
         career_alignments_data = validated_data.career_alignments
@@ -568,7 +525,6 @@ def download():
     
     pdf = FPDF()
     
-    # Add custom fonts for Unicode and bold support
     try:
         pdf.add_font('DejaVuSansCondensed', '', os.path.join(FONTS_DIR, 'DejaVuSansCondensed.ttf'), uni=True)
         pdf.add_font('DejaVuSansCondensed', 'B', os.path.join(FONTS_DIR, 'DejaVuSansCondensed-Bold.ttf'), uni=True)
@@ -579,13 +535,67 @@ def download():
         
     pdf.add_page()
     
-    # --- Generate PDF content from plain text and Markdown (UPDATED with MBTI) ---
     pdf.set_font('DejaVuSansCondensed', 'B', 16)
     pdf.ln()
     pdf.cell(0, 10, 'Your Personalized Career Guidance Report', ln=1, align='C')
     pdf.ln(10)
+
+
+    intro1 = """We extend our heartfelt appreciation for your active participation in our psychometric assessment designed to evaluate engineering potential. Your thoughtful responses have significantly contributed to the creation of this comprehensive report, aimed at assessing your alignment with a future in engineering.
+
+As you embark on this journey of self-discovery and academic exploration, we invite you to engage deeply with the insights presented in the following pages. This report offers a detailed analysis of your inherent strengths, preferences, and aptitudes — serving as a personalized guide to help you make informed decisions about pursuing engineering as a potential career path. We encourage you to read the report in its entirety, as each section offers a valuable perspective that contributes to a well-rounded understanding of your suitability for the field.
+    """
+    pdf.set_font('DejaVuSansCondensed', '', 10)
     
-    # New section for MBTI result
+    # Define a width for multi_cell to prevent horizontal overflow
+    page_width = pdf.w - 2 * pdf.l_margin # Calculate usable page width
+    pdf.multi_cell(page_width, 5, intro1.strip()) 
+    pdf.ln(10) 
+
+    intro2=f"""
+    Dear {student_name},
+    """
+    pdf.set_font('DejaVuSansCondensed', 'B', 11)
+    pdf.multi_cell(page_width, 5, intro2.strip()) 
+    pdf.ln(10)
+
+    intro3="""Choosing a college major or academic discipline is often a complex and overwhelming decision, frequently influenced by external pressures such as job market trends, career prospects, and societal expectations. While seeking advice from parents, educators, and peers is a natural and often helpful step, it is equally important to reflect inward — to understand your own capabilities, interests, and aspirations.
+    
+Can we enhance our decision-making process by gaining clarity about ourselves? Are we aware of how our personal strengths and interests align with the unique demands of different academic fields?
+    
+Thriving in any discipline, especially engineering, requires a distinctive set of cognitive abilities — including logical reasoning, critical thinking, mathematical aptitude, and problem-solving skills. Each individual possesses a unique profile of abilities — some innate, others cultivated through experience and learning.
+    
+What if there were a structured and objective way to evaluate how well your natural strengths align with the demands of engineering? This report strives to do precisely that — to provide personalized, evidence-based insights to support your academic and career planning.
+    """
+    pdf.set_font('DejaVuSansCondensed', '', 10)
+    pdf.multi_cell(page_width, 5, intro3.strip()) 
+    pdf.ln(10)
+    
+    pdf.set_font('DejaVuSansCondensed', 'B', 12)
+    pdf.multi_cell(page_width, 10, 'Disclaimer:') 
+    pdf.ln(1)
+    
+    pdf.set_font('DejaVuSansCondensed', '', 10)
+    pdf.multi_cell(page_width, 5, 'This psychometric assessment has been developed with the intention of guiding students in evaluating their suitability for engineering studies. The analysis is based on your individual responses to scenario-based questions and should be viewed as one of several tools in your decision-making toolkit. We advise against relying solely on this report and recommend consulting with career counselors or academic advisors for additional perspective. Please refer to the terms and conditions section at the end of this report for further clarification.') 
+    pdf.ln(10)
+    
+    pdf.set_font('DejaVuSansCondensed', 'B', 12)
+    pdf.multi_cell(page_width, 10, 'Important Note:') 
+    pdf.ln(1)
+    
+    pdf.set_font('DejaVuSansCondensed', '', 10)
+    pdf.multi_cell(page_width, 5, 'This assessment specifically focuses on alignment with engineering disciplines. A result indicating a lower alignment does not imply an absence of potential or talent in other fields. Your strengths may lie in domains not covered by this evaluation. We urge you to interpret your results within the context of engineering suitability while remaining open to exploring a broad spectrum of academic and career opportunities.') 
+    pdf.ln(10)
+    
+    pdf.set_font('DejaVuSansCondensed', 'B', 12)
+    pdf.multi_cell(page_width, 10, 'Intended Audience:') 
+    pdf.ln(1)
+    
+    pdf.set_font('DejaVuSansCondensed', '', 10)
+    pdf.multi_cell(page_width, 5, 'This report is most beneficial for students who are in the process of selecting their undergraduate field of study, parents guiding their children through college decisions, and individuals preparing for engineering admission counseling or considering engineering as a future course of study.') 
+    pdf.ln(10)
+    
+    # Section for MBTI result
     pdf.set_font('DejaVuSansCondensed', 'B', 14)
     pdf.ln()
     pdf.cell(0, 10, 'MBTI Personality Analysis', ln=1)
@@ -615,10 +625,10 @@ def download():
     # The rest of the career alignments, clarity, and disclaimer sections
     pdf.set_font('DejaVuSansCondensed', 'B', 14)
     pdf.ln()
-    pdf.cell(0, 10, 'Career Alignments', ln=1)
+    pdf.cell(0, 10, 'Recommended Career Alignments', ln=1)
     
     for career in career_alignments_data:
-        pdf.ln(2) # New line for a new career entry
+        pdf.ln(2)
         
         pdf.set_font('DejaVuSansCondensed', 'B', 12)
         pdf.multi_cell(0, 5, f"{career.name} ({career.match_score:.1f}% Match)")
@@ -646,25 +656,71 @@ def download():
 
         pdf.ln(5)
 
-    pdf.set_font('DejaVuSansCondensed', 'B', 14)
-    pdf.ln() # New line before Clarity and Impact section
-    pdf.cell(0, 10, 'Clarity and Impact', ln=1)
-    pdf.set_font('DejaVuSansCondensed', '', 12)
+    pdf.set_font('DejaVuSansCondensed', 'B', 12)
+    pdf.cell(0, 5, 'Clarity and Impact', ln=1)
+    pdf.set_font('DejaVuSansCondensed', '', 10)
     clarity_plain = re.sub(r'[\*_`]', '', clarity_and_impact)
     pdf.ln() # New line before clarity content
     pdf.multi_cell(0, 5, clarity_plain)
     pdf.ln(5)
 
-    pdf.set_font('DejaVuSansCondensed', 'B', 14)
+    pdf.set_font('DejaVuSansCondensed', 'B', 12)
     pdf.ln() # New line before Disclaimer section
-    pdf.cell(0, 10, 'Disclaimer', ln=1)
-    pdf.set_font('DejaVuSansCondensed', '', 12)
+    pdf.cell(0, 5, 'Disclaimer', ln=1)
+    pdf.set_font('DejaVuSansCondensed', '', 10)
     disclaimer_plain = re.sub(r'[\*_`]', '', disclaimer)
-    pdf.ln() # New line before disclaimer content
+    pdf.ln(5) # New line before disclaimer content
     pdf.multi_cell(0, 5, disclaimer_plain)
+    pdf.ln(8)
 
+
+    pdf.set_font('DejaVuSansCondensed', 'B', 12)
+    pdf.set_x(pdf.l_margin)
+    pdf.multi_cell(page_width, 10, 'About the Methodology:') 
+    pdf.ln(1)
+
+    concluding_text1 = """
+This assessment is grounded in a personality-driven framework. Your responses have been analyzed using associative techniques that map your answers to a defined set of personality traits. These traits are then correlated with specific factors relevant to your academic and career alignment.
+    
+It is important to recognize that, like any psychometric instrument, a degree of subjectivity and a margin of error may be present. Factors such as the test environment, individual context, and the ever-evolving landscape of education can influence results. To ensure relevance and accuracy, the assessment framework is regularly updated and refined in line with emerging academic standards and technological advancements.
+    
+The test design incorporates significant contributions from generative AI, which supports the creation, validation, and enhancement of content in accordance with psychometric best practices for reliability and validity.
+    """
+    pdf.set_font('DejaVuSansCondensed', '', 10)
+    pdf.set_x(pdf.l_margin)
+    pdf.multi_cell(page_width, 5, concluding_text1.strip())
+    pdf.ln(5) 
+
+    pdf.set_font('DejaVuSansCondensed', 'B', 12)
+    pdf.set_x(pdf.l_margin)
+    pdf.multi_cell(page_width, 10, 'Terms & Conditions:') 
+    pdf.ln(1)
+    
+    concluding_text2="""
+Disclaimer of Outcome: This assessment is intended solely for informational and guidance purposes. It does not guarantee specific academic, professional, or personal outcomes. The organization does not warrant the accuracy, completeness, or reliability of the information presented in the assessment.
+    
+Decision-Making Responsibility: Any actions or decisions taken based on this report are entirely the responsibility of the individual participant. The organization bears no responsibility for any direct or indirect consequences resulting from decisions made based on the assessment.
+    
+Limitation of Liability: Under no circumstances shall the organization be held liable for any direct, indirect, incidental, consequential, or special damages arising from the use or interpretation of the assessment results.
+    
+Indemnification: By participating in this assessment, you agree to indemnify and hold harmless the organization and its representatives (including officers, employees, and agents) from any claims or liabilities that may arise due to your decisions or actions based on the assessment findings.
+    
+Scope of Liability: To the fullest extent permitted by applicable law, the organization's liability in relation to this assessment is strictly limited to the amount paid, if any, for access to the assessment.
+    
+AI-Assisted Design: The assessment’s content and structure have been significantly informed by generative AI technologies. All prompts and processes used adhere to the foundational standards of reliability and validity as required in psychometric assessments.
+    
+Not a Substitute for Professional Advice: This assessment is not intended to replace expert guidance. Participants are encouraged to consult qualified academic or career professionals before making significant decisions based on the results.
+    
+Subject to Change: The organization reserves the right to update, modify, suspend, or terminate the assessment or its features at any time, without prior notification.
+    
+Acknowledgement & Consent: By undertaking this assessment, you acknowledge that your participation is voluntary and that you accept all the terms and conditions stated herein.
+    """
+    pdf.set_font('DejaVuSansCondensed', '', 10)
+    pdf.set_x(pdf.l_margin)
+    pdf.multi_cell(page_width, 5, concluding_text2.strip())
+    pdf.ln(5) 
+    
     try:
-        # The output is a bytearray, so no encoding is needed.
         pdf_output = io.BytesIO(pdf.output(dest='S'))
         pdf_output.seek(0)
         return send_file(
@@ -685,7 +741,7 @@ def generate_prompt(session_data: dict) -> str:
     answers = session_data.get('assessment_answers', {})
     questions_list = ASSESSMENT_QUESTIONS_RAW.strip().split('\n\n')
 
-    # --- UPDATED: Use dynamic trait calculation instead of hardcoded scoring ---
+    # Use dynamic trait calculation instead of hardcoded scoring
     if answers:
         # Calculate traits dynamically
         top_traits_list = calculate_top_traits(answers, top_n=10)  # Get more traits for AI analysis
@@ -703,7 +759,6 @@ def generate_prompt(session_data: dict) -> str:
     else:
         # Fallback for when no answers are available
         personality_summary = "Unable to determine traits - no assessment answers available"
-    # --- END UPDATED ---
     
     graduation_subjects = session_data.get('graduation_subjects', 'None specified')
     preferred_field = session_data.get('preferred_field', 'None specified')
@@ -740,7 +795,7 @@ def generate_prompt(session_data: dict) -> str:
     {{
     "name": "CareerName1",
     "match_score": 90.5,
-    "explanation": "A detailed explanation (of about 250 words) of why this career is a good fit, linking it to the user's calculated traits and subjects. This text should use markdown for formatting.",
+    "explanation": "A detailed explanation (of about 250 words) of why this career is a good fit, linking it to the user's calculated traits and don't use the subjects as the top priority for the suggestion, if a person's traits are matching with a different domain of study then suggest them that as well. This text should use markdown for formatting.",
     "competitive_exams": ["Exam A", "Exam B"],
     "degree_courses": ["Course X", "Course Y"]
     }},
@@ -755,7 +810,7 @@ def generate_prompt(session_data: dict) -> str:
     
     return prompt
 
-# --- ADDITIONAL ROUTE FOR DEBUGGING TRAITS (OPTIONAL) ---
+# --- ADDITIONAL ROUTE FOR DEBUGGING TRAITS ---
 @app.route('/debug/traits')
 def debug_traits():
     """Debug route to see trait calculation results (remove in production)"""
