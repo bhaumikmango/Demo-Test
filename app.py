@@ -169,7 +169,6 @@ class FinalSuggestionModel(BaseModel):
     mbti_result: MbtiResultModel  
     career_alignments: List[CareerDetail] # Note: The prompt now requests exactly 8 careers.
     clarity_and_impact: str
-    disclaimer: str
 
 # Dummy Firestore-like setup for Flask backend
 _firestore_db = defaultdict(dict)
@@ -483,7 +482,6 @@ def result():
     
     mbti_explanation = markdown.markdown(mbti_result.get('explanation', ''), extensions=['nl2br'])
     clarity_and_impact = markdown.markdown(suggestion_data.get('clarity_and_impact', ''), extensions=['nl2br'])
-    disclaimer = markdown.markdown(suggestion_data.get('disclaimer', ''), extensions=['nl2br'])
     
     raw_suggestion_plain_text = session.get('raw_suggestion_plain_text', '')
 
@@ -495,7 +493,6 @@ def result():
         top_traits=top_traits,
         career_alignments=career_alignments,
         clarity_and_impact=clarity_and_impact,
-        disclaimer=disclaimer,
         mbti_result=mbti_result,
         mbti_explanation=mbti_explanation,
         raw_suggestion_plain_text=raw_suggestion_plain_text,
@@ -517,7 +514,6 @@ def download():
         mbti_result = validated_data.mbti_result
         career_alignments_data = validated_data.career_alignments
         clarity_and_impact = validated_data.clarity_and_impact
-        disclaimer = validated_data.disclaimer
     except (json.JSONDecodeError, ValidationError) as e:
         print(f"Error parsing or validating JSON data for download: {e}")
         flash("An error occurred while processing the download request.", 'danger')
@@ -665,16 +661,6 @@ What if there were a structured and objective way to evaluate how well your natu
     pdf.ln(5)
 
     pdf.set_font('DejaVuSansCondensed', 'B', 12)
-    pdf.ln() # New line before Disclaimer section
-    pdf.cell(0, 5, 'Disclaimer', ln=1)
-    pdf.set_font('DejaVuSansCondensed', '', 10)
-    disclaimer_plain = re.sub(r'[\*_`]', '', disclaimer)
-    pdf.ln(5) # New line before disclaimer content
-    pdf.multi_cell(0, 5, disclaimer_plain)
-    pdf.ln(8)
-
-
-    pdf.set_font('DejaVuSansCondensed', 'B', 12)
     pdf.set_x(pdf.l_margin)
     pdf.multi_cell(page_width, 10, 'About the Methodology:') 
     pdf.ln(1)
@@ -786,7 +772,7 @@ def generate_prompt(session_data: dict) -> str:
 
     {{
     "mbti_result": {{
-    "type": "INTJ->The Architect (Introverted, Intuitive, Thinking, Judging)",
+    "type": "ENTJ->The Commander (Extroverted, Intuitive, Thinking, Judging)",
     "explanation": "A detailed explanation (around 400 words) of the MBTI type based on the selected assessment options and calculated traits. This should describe the user's personality traits, preferences, and natural inclinations and the text should use markdown for formatting.",
     "strengths": ["Analytical", "Strategic", "Independent", "Organized", "Focused"],
     "weaknesses": ["Stubborn", "Critical", "Insensitive", "Judgmental", "Overthinking"]
@@ -802,7 +788,6 @@ def generate_prompt(session_data: dict) -> str:
     ... (generate exactly 8 career objects in this list)
     ],
     "clarity_and_impact": "A detailed paragraph explaining the clarity and impact of these career choices, and what the student can expect to achieve at the end of their careers. This text should use markdown for formatting.",
-    "disclaimer": "A brief, friendly disclaimer telling the student that their future lies in their hands and this report is just a suggestion and wish them luck for their fruitful future. This text should use markdown for formatting."
     }}
 
     The response must be a single, complete JSON object.
