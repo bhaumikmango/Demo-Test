@@ -42,66 +42,66 @@ FONTS_DIR = os.path.join(os.path.dirname(__file__), 'fonts')
 
 # --- TRAIT MAPPING FOR DYNAMIC CALCULATION ---
 TRAIT_MAPPING = {
-    1: {'A': 'Logical Reasoning', 'B': 'Creative Expression'},
-    2: {'A': 'Organization', 'B': 'Adaptability'},
-    3: {'A': 'Empathy', 'B': 'Analytical Thinking'},
-    4: {'A': 'Leadership', 'B': 'Supportive Nature'},
-    5: {'A': 'Numerical Aptitude', 'B': 'Imaginative Thinking'},
-    6: {'A': 'Verbal Communication', 'B': 'Independent Working'},
-    7: {'A': 'Accuracy & Diligence', 'B': 'Innovation'},
-    8: {'A': 'Technical Curiosity', 'B': 'Emotional Insight'},
-    9: {'A': 'Competitive Drive', 'B': 'Teamwork'},
-    10: {'A': 'Technical Depth', 'B': 'Artistic Creativity'},
-    11: {'A': 'Data-Driven Decision Making', 'B': 'Intuition'},
-    12: {'A': 'Leadership', 'B': 'Listening & Empathy'},
-    13: {'A': 'Detail Orientation', 'B': 'Curiosity'},
-    14: {'A': 'Structure & Discipline', 'B': 'Exploratory Learning'},
-    15: {'A': 'Scientific Curiosity', 'B': 'Literary & Dramatic Expression'},
-    16: {'A': 'Assertiveness', 'B': 'Reflectiveness'},
-    17: {'A': 'Performance Focus', 'B': 'Collaboration'},
-    18: {'A': 'Quantitative Analysis', 'B': 'Visual Interpretation'},
-    19: {'A': 'Productivity Orientation', 'B': 'Learning Focus'},
-    20: {'A': 'Leadership Confidence', 'B': 'Quiet Contribution'},
-    21: {'A': 'Technical Problem-Solving', 'B': 'Social Influence'},
-    22: {'A': 'Scientific Inquiry', 'B': 'Design Sensibility'},
-    23: {'A': 'Stress Tolerance', 'B': 'Adaptability'},
-    24: {'A': 'Investigative Mindset', 'B': 'Imaginative Thinking'},
-    25: {'A': 'Pragmatism', 'B': 'Expressive Thought'},
-    26: {'A': 'Organizational Leadership', 'B': 'Personal Supportiveness'},
-    27: {'A': 'Financial Reasoning', 'B': 'Aesthetic Interpretation'},
-    28: {'A': 'Technical Confidence', 'B': 'Spontaneous Creativity'},
-    29: {'A': 'Process Optimization', 'B': 'Emotional Motivation'},
-    30: {'A': 'Focused Independence', 'B': 'Collaborative Engagement'},
-    31: {'A': 'Structured Thinking', 'B': 'Exploratory Thinking'},
-    32: {'A': 'Routine Orientation', 'B': 'Freedom & Flexibility'},
-    33: {'A': 'Precision', 'B': 'Originality'},
-    34: {'A': 'Fact-Based Thinking', 'B': 'Emotion-Based Thinking'},
-    35: {'A': 'Leadership Assertiveness', 'B': 'Supportive Facilitation'},
-    36: {'A': 'Engineering Creativity', 'B': 'Artistic Storytelling'},
-    37: {'A': 'Achievement Drive', 'B': 'Helping Orientation'},
-    38: {'A': 'Comparative Reasoning', 'B': 'Aesthetic Evaluation'},
-    39: {'A': 'Goal Orientation', 'B': 'Curiosity-Driven Exploration'},
-    40: {'A': 'Leadership Fulfillment', 'B': 'Supportive Contribution'},
-    41: {'A': 'Event Coordination', 'B': 'Conceptual Thinking'},
-    42: {'A': 'Analytical Problem Solving', 'B': 'Creative Problem Solving'},
-    43: {'A': 'Task Management', 'B': 'Focus & Depth'},
-    44: {'A': 'Technological Curiosity', 'B': 'Cultural Awareness'},
-    45: {'A': 'Competitiveness', 'B': 'Mentoring & Support'},
-    46: {'A': 'Stability Preference', 'B': 'Adaptability'},
-    47: {'A': 'Mechanical Aptitude', 'B': 'Emotional Intelligence'},
-    48: {'A': 'Efficiency', 'B': 'Inclusivity'},
-    49: {'A': 'Academic Learning', 'B': 'Experiential Learning'},
-    50: {'A': 'Fact-Based Confidence', 'B': 'People-Based Confidence'},
-    51: {'A': 'Technical Innovation', 'B': 'Inspirational Thinking'},
-    52: {'A': 'Linear Thinking', 'B': 'Associative Thinking'},
-    53: {'A': 'Assertive Leadership', 'B': 'Supportive Role'},
-    54: {'A': 'Quantitative Reasoning', 'B': 'Visual Communication'},
-    55: {'A': 'Goal Orientation', 'B': 'Exploratory Motivation'},
-    56: {'A': 'Scientific Mindset', 'B': 'Artistic Mindset'},
-    57: {'A': 'Performance-Driven', 'B': 'Harmony-Seeking'},
-    58: {'A': 'Logical Reasoning', 'B': 'Creative Reasoning'},
-    59: {'A': 'Oral Expression', 'B': 'Written/Visual Expression'},
-    60: {'A': 'Achievement Drive', 'B': 'Collaborative Spirit'}
+    1: {'A': 'Logical Reasoning & Problem Solving', 'B': 'Creative Arts & Design'},
+    2: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    3: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    4: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    5: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    6: {'A': 'Logical Reasoning & Problem Solving', 'B': 'Creative Arts & Design'},
+    7: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    8: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    9: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    10: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    11: {'A': 'Analytical & Critical Thinking', 'B': 'Creative Arts & Design'},
+    12: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    13: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    14: {'A': 'Communication & Persuasion', 'B': 'Supportive & Collaborative Nature'},
+    15: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    16: {'A': 'Logical Reasoning & Problem Solving', 'B': 'Creative Arts & Design'},
+    17: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    18: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    19: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    20: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    21: {'A': 'STEM & Technical Aptitude', 'B': 'Creative Arts & Design'},
+    22: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    23: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    24: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    25: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    26: {'A': 'STEM & Technical Aptitude', 'B': 'Creative Arts & Design'},
+    27: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    28: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    29: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    30: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    31: {'A': 'Analytical & Critical Thinking', 'B': 'Creative Arts & Design'},
+    32: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    33: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    34: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    35: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    36: {'A': 'Logical Reasoning & Problem Solving', 'B': 'Research & Knowledge Exploration'},
+    37: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    38: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    39: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    40: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    41: {'A': 'STEM & Technical Aptitude', 'B': 'Creative Arts & Design'},
+    42: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    43: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    44: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    45: {'A': 'Numerical & Quantitative Skills', 'B': 'Business & Entrepreneurship'},
+    46: {'A': 'Logical Reasoning & Problem Solving', 'B': 'Creative Arts & Design'},
+    47: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    48: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    49: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    50: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    51: {'A': 'Hands-on & Mechanical Skills', 'B': 'Creative Arts & Design'},
+    52: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    53: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    54: {'A': 'Communication & Persuasion', 'B': 'Supportive & Collaborative Nature'},
+    55: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
+    56: {'A': 'Organization & Planning', 'B': 'Research & Knowledge Exploration'},
+    57: {'A': 'Organization & Planning', 'B': 'Adaptability & Flexibility'},
+    58: {'A': 'Emotional Intelligence & Empathy', 'B': 'Analytical & Critical Thinking'},
+    59: {'A': 'Leadership & Influence', 'B': 'Supportive & Collaborative Nature'},
+    60: {'A': 'Numerical & Quantitative Skills', 'B': 'Creative Arts & Design'},
 }
 
 def calculate_top_traits(user_answers, top_n=5):
@@ -188,185 +188,185 @@ def save_session_data(session_id: str, data: dict):
 
 # --- Assessment Questions (as a single string to be split) ---
 ASSESSMENT_QUESTIONS_RAW = """
-A) I enjoy solving puzzles that require logical steps.
-B) I like expressing myself through creative writing or art.
+A) I enjoy solving complex logic puzzles. 
+B) I prefer brainstorming imaginative stories or ideas.
 
-A) I always plan my day in advance and stick to schedules.
-B) I prefer being flexible and adapting as the day goes on.
+A) I make detailed plans before starting anything. 
+B) I go with the flow and adjust as I go.
 
-A) I often sense what others are feeling, even when they don't say it.
-B) I like analyzing situations with facts before drawing conclusions.
+A) I can sense people’s emotions without them telling me. 
+B) I focus on facts and objective details in conversations.
 
-A) I enjoy leading group projects and organizing teams.
-B) I prefer helping others succeed without being in charge.
+A) I like taking the lead in group work. 
+B) I like supporting others without being in charge.
 
-A) I feel confident when working with numbers and calculations.
-B) I feel confident when designing or imagining new things.
+A) I enjoy working with numbers and statistics. 
+B) I enjoy sketching, painting, or designing.
 
-A) I enjoy speaking to groups and persuading others.
-B) I enjoy working quietly and independently on tasks.
+A) I break problems into small, logical steps. 
+B) I think of multiple creative possibilities at once.
 
-A) I follow procedures carefully and focus on accuracy.
-B) I enjoy improvising and experimenting with new methods.
+A) I keep my workspace organized and tidy. 
+B) I’m comfortable working in slightly chaotic environments.
 
-A) I often find myself thinking about how machines or systems work.                   
-B) I often find myself thinking about how people feel or behave.
+A) I can tell when someone is upset even if they act fine. 
+B) I rely on evidence and data before deciding.
 
-A) I enjoy competing and striving to be the best.                   
-B) I enjoy collaborating and building team spirit.
+A) I motivate and guide others toward a goal. 
+B) I work best by contributing my part to a shared goal.
 
-A) I’m energized by deep technical challenges.                   
-B) I’m energized by visual or expressive tasks like art or storytelling.
+A) I calculate budgets or expenses with ease. 
+B) I create visual concepts or artistic projects.
 
-A) I enjoy reviewing data or evidence to make a decision.                   
-B) I enjoy following my instincts or gut feeling when deciding.                   
+A) I enjoy identifying patterns in data. 
+B) I enjoy experimenting with different artistic styles.
 
-A) I take initiative and guide others in a group setting.                   
-B) I listen carefully and make sure everyone is heard.                   
+A) I like planning events down to the smallest detail. 
+B) I like to keep plans loose and spontaneous.
 
-A) I enjoy fixing errors and paying attention to fine details.                   
-B) I enjoy exploring new topics even if I don’t know much about them.                   
+A) I can comfort others when they’re stressed. 
+B) I assess situations logically without emotional influence.
 
-A) I prefer having step-by-step instructions.                   
-B) I prefer figuring things out through trial and error.                   
+A) I enjoy persuading people toward my ideas. 
+B) I enjoy collaborating quietly toward common goals.
 
-A) I like experimenting with ideas in science or technology.                   
-B) I like exploring characters and emotions through writing or acting.                   
+A) I like solving math-related problems. 
+B) I like designing visually appealing layouts.
 
-A) I enjoy debates and expressing clear opinions.                   
-B) I enjoy observing and reflecting before sharing thoughts.                   
+A) I quickly understand cause-and-effect in problems. 
+B) I enjoy thinking of alternative, unconventional solutions.
 
-A) I am energized by competition and measurable goals.                   
-B) I am fulfilled by collaboration and shared goals.                   
+A) I prefer following a schedule daily. 
+B) I prefer changing my routine as needed.
 
-A) I like interpreting graphs, formulas, or statistics.                   
-B) I like interpreting images, stories, or music.                   
+A) I easily empathize with characters in a story. 
+B) I focus on the author’s message and reasoning.
 
-A) I focus on results and getting things done efficiently.                   
-B) I focus on the process and the experience of learning.                   
+A) I enjoy coordinating and delegating tasks. 
+B) I enjoy helping without taking credit.
 
-A) I feel most confident when I’m in a leadership role.                   
-B) I feel most confident when I’m contributing quietly behind the scenes.                   
+A) I work well with formulas and equations. 
+B) I work well with images, colors, and patterns.
 
-A) I enjoy coding and building things that solve real-world problems.                   
-B) I enjoy engaging people and motivating them through conversation.                   
+A) I am drawn to solving scientific or technical problems. 
+B) I am drawn to artistic performances or exhibitions.
 
-A) I like working on experiments and discovering how nature works.                   
-B) I like designing things that are visually appealing.                   
+A) I prepare checklists for my activities. 
+B) I handle tasks as they come without much prep.
 
-A) I stay calm and focused even under pressure.                   
-B) I adapt quickly to new environments and expectations.                   
+A) I can often “read between the lines” in conversations. 
+B) I prefer to stick to what’s explicitly said.
 
-A) I prefer investigating facts to understand how things work.                   
-B) I prefer imagining possibilities that haven’t been tried before.                   
+A) I enjoy being the spokesperson for a team. 
+B) I enjoy working behind the scenes.
 
-A) I’m known for being practical and results-driven.                   
-B) I’m known for being thoughtful and expressive.                   
+A) I feel energized when analyzing numerical trends. 
+B) I feel energized when creating unique designs.
 
-A) I enjoy organizing events and managing responsibilities.                   
-B) I enjoy helping others one-on-one with emotional support.                   
+A) I like using logic to troubleshoot mechanical issues. 
+B) I like using creativity to reimagine how things could be.
 
-A) I like comparing financial outcomes and calculating risks.                   
-B) I like interpreting the mood and flow of creative works.                   
+A) I prefer structured work environments. 
+B) I prefer open-ended, flexible environments.
 
-A) I am confident in working with scientific tools or technologies.                   
-B) I am confident when improvising or coming up with spontaneous ideas.                   
+A) I respond compassionately when friends share problems. 
+B) I offer practical advice and solutions.
 
-A) I feel proud when I optimize systems or improve efficiency.                   
-B) I feel proud when I influence or inspire others emotionally.                   
+A) I naturally influence group decisions. 
+B) I naturally offer help where needed without leading.
 
-A) I enjoy working independently on long, focused tasks.                   
-B) I enjoy collaborating with others in group activities.                   
+A) I’m comfortable calculating percentages and ratios. 
+B) I’m comfortable creating illustrations or visual content.
 
-A) I prefer solving structured problems with clear rules.                   
-B) I prefer exploring open-ended questions without right or wrong answers.                   
+A) I think analytically when faced with challenges. 
+B) I think creatively when faced with challenges.
 
-A) I like following a routine with consistent expectations.                   
-B) I like having freedom to choose what and when I do things.                   
+A) I plan projects step-by-step. 
+B) I like improvising in projects.
 
-A) I enjoy being exact and double-checking my work.                   
-B) I enjoy expressing original ideas, even if they’re not perfect.                   
+A) I can sense changes in someone’s mood. 
+B) I focus on measurable signs or proof.
 
-A) I prefer facts and figures over stories and emotions.                   
-B) I prefer stories and emotions over facts and figures.                   
+A) I like public speaking to inspire others. 
+B) I like contributing through personal, quiet effort.
 
-A) I take charge when others hesitate.                   
-B) I encourage others to speak when they’re hesitant.                   
+A) I enjoy financial problem solving. 
+B) I enjoy visual arts.
 
-A) I enjoy developing new technologies or mechanical solutions.                   
-B) I enjoy creating performances or artworks that tell stories.                   
+A) I look for logical flaws in arguments. 
+B) I think about symbolic meaning and underlying themes.
 
-A) I am energized by winning and proving my capabilities.                   
-B) I am fulfilled when I support someone else's success.                   
+A) I like mapping out long-term goals. 
+B) I like exploring options as they come.
 
-A) I like comparing measurable results.                   
-B) I like comparing artistic or emotional impacts.                   
+A) I comfort friends in difficult times. 
+B) I offer straightforward, logical feedback.
 
-A) I set specific goals and track my progress.                   
-B) I explore many interests without rigid plans.                   
+A) I enjoy leading brainstorming sessions. 
+B) I enjoy refining and supporting existing ideas.
 
-A) I find satisfaction in being the leader.                   
-B) I find satisfaction in helping the leader succeed.                   
+A) I prefer working on spreadsheets. 
+B) I prefer working on visual presentations.
 
-A) I enjoy organizing events and coordinating logistics.                   
-B) I enjoy exploring big ideas and abstract concepts.                   
+A) I enjoy problem-solving in coding or science. 
+B) I enjoy choreographing, composing, or performing arts.
 
-A) I prefer solving problems using facts and data.                   
-B) I prefer solving problems by imagining new possibilities.                   
+A) I keep a strict calendar for tasks. 
+B) I allow room for spontaneous decisions.
 
-A) I enjoy managing multiple responsibilities with precision.                   
-B) I enjoy focusing deeply on one meaningful task.                   
+A) I quickly sense group tensions. 
+B) I identify process inefficiencies.
 
-A) I get excited when learning about new inventions or technologies.                   
-B) I get excited when exploring cultural traditions or histories.                   
+A) I influence decisions in meetings. 
+B) I offer consistent team support.
 
-A) I enjoy competing in academic or skill-based challenges.                   
-B) I enjoy helping others learn and succeed.                   
+A) I enjoy tracking budgets. 
+B) I enjoy conceptualizing marketing campaigns.
 
-A) I prefer routines and stable environments.                   
-B) I thrive in new and changing situations.                   
+A) I focus on practical solutions. 
+B) I focus on innovative possibilities.
 
-A) I enjoy working with machines, tools, or hardware.                   
-B) I enjoy working with emotions, stories, or personal growth.                   
+A) I enjoy order and organization. 
+B) I enjoy change and adaptability.
 
-A) I focus on completing tasks quickly and correctly.                   
-B) I focus on making sure everyone in the group feels included.                                      
+A) I connect emotionally with others easily. 
+B) I evaluate situations with facts.
 
-A) I like learning from structured lessons or textbooks.                   
-B) I like learning from real-life experiences and discovery.                   
+A) I enjoy making executive decisions. 
+B) I enjoy providing resources for decision-makers.
 
-A) I feel confident when interpreting facts and data.                   
-B) I feel confident when interpreting people and emotions.                   
+A) I feel confident using mathematics in real life. 
+B) I feel confident creating visual concepts.
 
-A) I often come up with ideas to improve systems or tools.                   
-B) I often come up with ideas to connect or inspire others.                   
+A) I enjoy building or repairing things. 
+B) I enjoy imagining how things could be improved.
 
-A) I enjoy following a logical process from start to finish.                   
-B) I enjoy jumping between ideas and seeing connections.                   
+A) I prefer following clear processes. 
+B) I prefer experimenting with new methods.
 
-A) I like being in control of outcomes and setting direction.                   
-B) I like supporting others and providing backup when needed.                   
+A) I offer emotional comfort to friends. 
+B) I offer strategic solutions to friends.
 
-A) I enjoy calculating budgets, prices, or quantities.                   
-B) I enjoy creating visuals, presentations, or expressive content.                   
+A) I am persuasive in debates. 
+B) I am cooperative in team efforts.
 
-A) I prefer clear goals and specific expectations.                   
-B) I prefer open-ended projects with space for exploration.                   
+A) I enjoy interpreting graphs and charts. 
+B) I enjoy creating storyboards and designs.
 
-A) I enjoy testing hypotheses and drawing conclusions.                   
-B) I enjoy exploring stories and expressing emotions.                   
+A) I focus on step-by-step execution. 
+B) I focus on the bigger picture possibilities.
 
-A) I am energized by direct challenges and performance metrics.                   
-B) I am energized by group harmony and collective success.                   
+A) I like consistent daily routines. 
+B) I like variety in my schedule.
 
-A) I analyze problems step by step using logic.                   
-B) I approach problems by imagining new angles or creative paths.                   
+A) I am sensitive to how others feel. 
+B) I am more focused on factual accuracy.
 
-A) I feel confident in public speaking and presentations.                   
-B) I feel confident when I write or express through art.
+A) I naturally guide group projects. 
+B) I naturally assist without leading.
 
-A) I enjoy competing and setting high personal goals.                   
-B) I enjoy collaborating on team projects and celebrating shared wins.
+A) I prefer accounting and record-keeping tasks. 
+B) I prefer creative marketing or design tasks.
 """
 
 student_name = ''
