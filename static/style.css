@@ -168,6 +168,12 @@ textarea {
     margin-top: 20px;
 }
 
+.form-actions-center {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
 /* Button Styles */
 .button {
     padding: 12px 25px;
