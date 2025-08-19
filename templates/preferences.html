@@ -5,10 +5,66 @@
     <title>Career Guidance Preferences</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+    <style>
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .nav-link {
+            color: #0a58ca;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+        .admin-link {
+            background-color: #0a58ca;
+            color: white;
+        }
+        .admin-link:hover {
+            background-color: #084298;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2>Let’s Get to Know You!</h2>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <a href="{{ url_for('index') }}" class="nav-link">← Back to Home</a>
+                <span class="user-info">Logged in as: {{ session.logged_in_user }}</span>
+            </div>
+            <div class="nav-right">
+                {% if session.logged_in_user == 'admin' %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link admin-link">Admin Panel</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            </div>
+        </nav>
+
+        <h2>Let's Get to Know You!</h2>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
@@ -18,18 +74,20 @@
                 </div>
             {% endif %}
         {% endwith %}
-        <form method="POST" action="/preferences" class="form-box">
+        <form method="POST" action="/preferences" class="form-box" style="size: 11px;">
 
-            <label for="student_name">Your Name:</label>
+            <label for="student_name">Your name:  *</label>
             <input type="text" id="student_name" name="student_name" placeholder="e.g. John Doe" required>
 
-            <label for="graduation_subjects">High School Subjects/12th Standard Subjects(comma-separated):</label>
-            <input type="text" id="graduation_subjects" name="graduation_subjects" placeholder="e.g. English, Economics, Chemistry" required>
+            <label for="subject">High school subjects/12th standard subjects:  *</label>
+            <input type="text" id="subject" name="subject" placeholder="e.g. English, Economics, Chemistry (comma-separated)" required>
 
-            <label for="preferred_field">Preferred Career Field (optional):</label>
+            <label for="preferred_field">Preferred career field:</label>
             <input type="text" id="preferred_field" name="preferred_field" placeholder="e.g. Political Diplomacy">
 
-            <button type="submit" class="button button-primary">Start Assessment</button>
+            <div class="form-actions-center">
+                <button type="submit" class="button button-primary">Start Assessment</button>
+            </div>
         </form>
     </div>
 </body>

@@ -5,9 +5,64 @@
   <title>Career Guidance Result</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  <style>
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .user-info {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .nav-link {
+      color: #0a58ca;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .nav-link:hover {
+      background-color: #f8f9fa;
+    }
+    .admin-link {
+      background-color: #0a58ca;
+      color: white;
+    }
+    .admin-link:hover {
+      background-color: #084298;
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
+        <nav class="nav-bar">
+      <div class="nav-left">
+        <span class="user-info">Logged in as: {{ session.username }}</span>
+      </div>
+      <div class="nav-right">
+        {% if session.get('is_admin') %}
+          <a href="{{ url_for('admin') }}" class="nav-link admin-link">Admin Panel</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+      </div>
+    </nav>
+
     <h2>✅ Your Personalized Career Guidance</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -50,7 +105,7 @@
               </ul>
             </div>
             <div class="trait-box">
-              <h5>Weaknesses:</h5> {# Corrected typo from "Weakeness" #}
+              <h5>Weaknesses:</h5>
               <ul>
                 {% for weakness in mbti_result.weaknesses %}
                   <li>{{ weakness }}</li>
@@ -70,7 +125,7 @@
         <ol class="career-list">
           {% for career in career_alignments %}
             <li>
-              <h4>{{ career.name }} ({{ career.match_score|round(1) }}% Match)</h4>
+              <h4>{{ career.name }} ({{ career.match_score}})</h4>
               <p>{{ career.explanation | safe }}</p>
               <h5>Key Steps:</h5>
               <ul>
@@ -106,9 +161,9 @@
       <p><strong>Disclaimer of Outcome:</strong> This assessment is intended solely for informational and guidance purposes. It does not guarantee specific academic, professional, or personal outcomes. The organization does not warrant the accuracy, completeness, or reliability of the information presented in the assessment.</p>
       <p><strong>Decision-Making Responsibility:</strong> Any actions or decisions taken based on this report are entirely the responsibility of the individual participant. The organization bears no responsibility for any direct or indirect consequences resulting from decisions made based on the assessment.</p>
       <p><strong>Limitation of Liability:</strong> Under no circumstances shall the organization be held liable for any direct, indirect, incidental, consequential, or special damages arising from the use or interpretation of the assessment results.</p>
-      <p><strong>Indemnification:</strong> By participating in this assessment, you agree to indemnify and hold harmless the organization and its representatives (including officers, employees, and agents) from any claims or liabilities that may arise due to your decisions or actions based on the assessment findings.</p>
+      <p><strong>Indemnification:</strong> By participating in this assessment, you agree to indemnify and hold harmless the organization and its representatives (including officers, employees, and agents) from any claims or liabilities that may arise due to your decisions or actions based on the assessment's findings.</p>
       <p><strong>Scope of Liability:</strong> To the fullest extent permitted by applicable law, the organization's liability in relation to this assessment is strictly limited to the amount paid, if any, for access to the assessment.</p>
-      <p><strong>AI-Assisted Design:</strong> The assessment’s content and structure have been significantly informed by generative AI technologies. All prompts and processes used adhere to the foundational standards of reliability and validity as required in psychometric assessments.</p>
+      <p><strong>AI-Assisted Design:</strong> The assessment's content and structure have been significantly informed by generative AI technologies. All prompts and processes used adhere to the foundational standards of reliability and validity as required in psychometric assessments.</p>
       <p><strong>Not a Substitute for Professional Advice:</strong> This assessment is not intended to replace expert guidance. Participants are encouraged to consult qualified academic or career professionals before making significant decisions based on the results.</p>
       <p><strong>Subject to Change:</strong> The organization reserves the right to update, modify, suspend, or terminate the assessment or its features at any time, without prior notification.</p>
       <p><strong>Acknowledgement & Consent:</strong> By undertaking this assessment, you acknowledge that your participation is voluntary and that you accept all the terms and conditions stated herein.</p>
@@ -122,5 +177,61 @@
     </div>
 
   </div>
+
+  <script>
+    {% if not session.get('is_admin') %}
+    // Auto-cleanup user when they navigate away (for non-admin users)
+    window.addEventListener('beforeunload', function() {
+        // Use sendBeacon for reliable cleanup even when navigating away
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon('/cleanup-user', new FormData());
+        } else {
+            // Fallback for older browsers
+            fetch('/cleanup-user', {method: 'POST'});
+        }
+    });
+
+    // Also add click listeners to download and other navigation elements
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all links that might navigate away from the results page
+        const navigationLinks = document.querySelectorAll('a[href*="/"], button[onclick*="window"], .logout-btn');
+
+        navigationLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                // Small delay to allow the cleanup request
+                setTimeout(() => {
+                    fetch('/cleanup-user', {method: 'POST'});
+                }, 100);
+            });
+        });
+    
+        // Fallback cleanup after 15 minutes of viewing results
+        setTimeout(function() {
+            fetch('/cleanup-user', {method: 'POST'})
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('User account automatically cleaned up after session completion');
+                    }
+                });
+        }, 900000); // 15 minutes but will display 10 minutes so that the user does not wait for the last minute
+    });
+
+    // Add a visible notification for non-admin users
+    document.addEventListener('DOMContentLoaded', function() {
+        const notification = document.createElement('div');
+        notification.innerHTML = `
+            <div class="alert alert-info alert-dismissible fade show" role="alert" style="margin-bottom: 20px;">
+                <strong>Note:</strong> Your session will be automatically be terminated after you finish viewing your results within 10 minutes so download the results as pdf.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+    
+        // Insert the notification at the top of the results container
+        const resultsContainer = document.querySelector('.container') || document.body;
+        resultsContainer.insertBefore(notification, resultsContainer.firstChild);
+    });
+    {% endif %}
+  </script>
 </body>
 </html>

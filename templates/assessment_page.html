@@ -33,7 +33,47 @@
             z-index: 1000;
             transition: width 12s linear;
         }
-        
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .nav-link {
+            color: #0a58ca;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+        .admin-link {
+            background-color: #0a58ca;
+            color: white;
+        }
+        .admin-link:hover {
+            background-color: #084298;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -41,9 +81,23 @@
     <div id="loading-bar"></div>
 
     <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <a href="{{ url_for('index') }}" class="nav-link">← Back to Home</a>
+                <span class="user-info">Logged in as: {{ session.logged_in_user }}</span>
+            </div>
+            <div class="nav-right">
+                {% if session.logged_in_user == 'admin' %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link admin-link">Admin Panel</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            </div>
+        </nav>
+
         <h1>🎓 Career Compass Assessment</h1>
         <p>👋 Welcome to the Career Strength Snapshot!</p>
-        <p>You’ll be presented with pairs of statements (two per question). Each pair contains two options that may both feel true — however, your task is to choose the one that best reflects your natural preferences, behaviors, or instincts.</p>
+        <p>You'll be presented with pairs of statements (two per question). Each pair contains two options that may both feel true — however, your task is to choose the one that best reflects your natural preferences, behaviors, or instincts.</p>
         <p>There are no right or wrong answers. Simply pick the option that you identify with more.</p>
         <p class="page-indicator">Page {{ page_num }} of {{ total_pages }}</p>
 
@@ -57,49 +111,108 @@
             {% endif %}
         {% endwith %}
 
-        <form action="/assessment/{{ page_num }}" method="post" onsubmit="return handleFormSubmission();">
-            {% for question_text in questions %}
-                <div class="question-box">
-                    {% set global_question_index = ((page_num - 1) * 12) + loop.index - 1 %}
-                    <p>{{ global_question_index + 1 }}. Which statement feels more like you?</p>
-                    <div class="radio-group">
-                        {% set options = question_text.split('\n') %}
-                        {% for option in options %}
-                            {% if option.strip() %}
-                                {% set option_char = option.strip()[0] %}
-                                <label style="display: block; margin-bottom: 0.5em;">
-                                    <input type="radio" name="q{{ global_question_index }}" value="{{ option_char }}" required
-                                    {% if session.get('assessment_answers', {}).get(global_question_index | string) == option_char %}checked{% endif %}>
-                                    {{ option | safe }}
-                                </label>
-                            {% endif %}
-                        {% endfor %}
+        {% if page_num < total_pages %}
+            <!-- Regular form for non-final pages -->
+            <form action="/assessment/{{ page_num }}" method="post" onsubmit="return handleFormSubmission();">
+                {% for question_text in questions %}
+                    <div class="question-box">
+                        {% set global_question_index = ((page_num - 1) * 12) + loop.index - 1 %}
+                        <p>{{ global_question_index + 1 }}. Which statement feels more like you?</p>
+                        <div class="radio-group">
+                            {% set options = question_text.split('\n') %}
+                            {% for option in options %}
+                                {% if option.strip() %}
+                                    {% set option_char = option.strip()[0] %}
+                                    <label style="display: block; margin-bottom: 0.5em;">
+                                        <input type="radio" name="q{{ global_question_index }}" value="{{ option_char }}" required
+                                        {% if session.get('assessment_answers', {}).get(global_question_index | string) == option_char %}checked{% endif %}>
+                                        {{ option | safe }}
+                                    </label>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
 
-            <div class="form-actions">
-                {% if page_num > 1 %}
-                    <button href="/assessment/{{ page_num - 1 }}" class="button button-secondary">Previous Page</button>
-                {% endif %}
-
-                {% if page_num < total_pages %}
+                <div class="form-actions">
+                    {% if page_num > 1 %}
+                        <a href="/assessment/{{ page_num - 1 }}" class="button button-secondary">Previous Page</a>
+                    {% else %}
+                        <div style="visibility: hidden;"></div>
+                    {% endif %}
                     <button type="submit" class="button button-primary">Next Page</button>
-                {% else %}
+                </div>
+            </form>
+        {% else %}
+            <!-- Special handling for the final page -->
+            <form id="final-assessment-form" onsubmit="return handleFinalSubmission(event);">
+                {% for question_text in questions %}
+                    <div class="question-box">
+                        {% set global_question_index = ((page_num - 1) * 12) + loop.index - 1 %}
+                        <p>{{ global_question_index + 1 }}. Which statement feels more like you?</p>
+                        <div class="radio-group">
+                            {% set options = question_text.split('\n') %}
+                            {% for option in options %}
+                                {% if option.strip() %}
+                                    {% set option_char = option.strip()[0] %}
+                                    <label style="display: block; margin-bottom: 0.5em;">
+                                        <input type="radio" name="q{{ global_question_index }}" value="{{ option_char }}" required
+                                        {% if session.get('assessment_answers', {}).get(global_question_index | string) == option_char %}checked{% endif %}>
+                                        {{ option | safe }}
+                                    </label>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    {% if page_num > 1 %}
+                        <a href="/assessment/{{ page_num - 1 }}" class="button button-secondary">Previous Page</a>
+                    {% endif %}
                     <button type="submit" class="button button-primary">Submit Assessment</button>
-                {% endif %}
-            </div>
-        </form>
+                </div>
+            </form>
+        {% endif %}
     </div>
 
     <script>
         function handleFormSubmission() {
-            const isFinalPage = {{ page_num }} === {{ total_pages }};
-            if (isFinalPage) {
-                const loadingBar = document.getElementById('loading-bar');
-                loadingBar.style.width = '100%';
-            }
+            // For regular pages, just continue normally
             return true;
+        }
+
+        function handleFinalSubmission(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            // Show loading bar
+            const loadingBar = document.getElementById('loading-bar');
+            loadingBar.style.width = '100%';
+            
+            // First, save the final page answers
+            const form = document.getElementById('final-assessment-form');
+            const formData = new FormData(form);
+            
+            // Submit final page answers to the current assessment page
+            fetch('/assessment/{{ page_num }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If successful, redirect to process_assessment
+                    window.location.href = '{{ url_for("process_assessment") }}';
+                } else {
+                    throw new Error('Failed to save final answers');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting your assessment. Please try again.');
+                loadingBar.style.width = '0'; // Reset loading bar
+            });
+            
+            return false;
         }
     </script>
 </body>

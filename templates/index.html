@@ -73,15 +73,80 @@
       display: block;
       margin-top: 0.5rem;
     }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .user-info {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .nav-link {
+      color: #0a58ca;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .nav-link:hover {
+      background-color: #f8f9fa;
+    }
+    .admin-link {
+      background-color: #0a58ca;
+      color: white;
+    }
+    .admin-link:hover {
+      background-color: #084298;
+      color: white;
+    }
   </style>
 </head>
 <body class="centered-page">
 
   <div class="container">
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <div class="nav-left">
+        <span class="user-info">Welcome, {{ session.logged_in_user }}!</span>
+      </div>
+      <div class="nav-right">
+        {% if session.logged_in_user == 'admin' %}
+          <a href="{{ url_for('admin_dashboard') }}" class="nav-link admin-link">Admin Panel</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+      </div>
+    </nav>
+
     <img src="https://aurigence.vercel.app/Aurigence%20logo%20without%20background.png" alt="Aurigence Logo" style="width: 200px; height: 155px; display: block; margin: 0 auto;">
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages" style="margin-bottom: 2rem;">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    
     <header class="hero-section">
       <h1>Career Compass</h1>
-      <p>Your Future, Trained by Professionals, Powered by AI. Your personalized journey to discovering the right career starts here. Uncover your potential with AI-driven insights tailored just for you.</p>
+      <p>Your future, trained by professionals, powered by AI. <br> personalized journey to discovering the right career starts here. Uncover your potential with AI-driven insights tailored just for you.</p>
       <a href="{{ url_for('preferences') }}" class="button button-primary">Start Your Personalized Test →</a>
     </header>
 
@@ -130,7 +195,7 @@
     </section>
 
     <footer class="footer-note">
-      <small>Built by Bhaumik Yadav</small>
+      <small>Built by <a href="https://www.linkedin.com/in/theprofessional-bhaumik-yadav/">Bhaumik Yadav</a></small>
       <br>
       <small>Powered by AI</small>
     </footer>
