@@ -119,19 +119,6 @@
 <body class="centered-page">
 
   <div class="container">
-    <!-- Navigation Bar -->
-    <nav class="nav-bar">
-      <div class="nav-left">
-        <span class="user-info">Welcome, {{ session.logged_in_user }}!</span>
-      </div>
-      <div class="nav-right">
-        {% if session.logged_in_user == 'admin' %}
-          <a href="{{ url_for('admin_dashboard') }}" class="nav-link admin-link">Admin Panel</a>
-        {% endif %}
-        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
-      </div>
-    </nav>
-
     <img src="https://aurigence.vercel.app/Aurigence%20logo%20without%20background.png" alt="Aurigence Logo" style="width: 200px; height: 155px; display: block; margin: 0 auto;">
     
     {% with messages = get_flashed_messages(with_categories=true) %}

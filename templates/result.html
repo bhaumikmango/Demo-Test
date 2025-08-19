@@ -51,18 +51,6 @@
 </head>
 <body>
   <div class="container">
-        <nav class="nav-bar">
-      <div class="nav-left">
-        <span class="user-info">Logged in as: {{ session.username }}</span>
-      </div>
-      <div class="nav-right">
-        {% if session.get('is_admin') %}
-          <a href="{{ url_for('admin') }}" class="nav-link admin-link">Admin Panel</a>
-        {% endif %}
-        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
-      </div>
-    </nav>
-
     <h2>✅ Your Personalized Career Guidance</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
