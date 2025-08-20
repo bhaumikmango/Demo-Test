@@ -188,7 +188,7 @@
             .then(response => {
                 if (response.ok) {
                     // If successful, redirect to process_assessment
-                    window.location.href = '{{ url_for("process_assessment") }}';
+                    window.location.href = '{{ url_for("result") }}';
                 } else {
                     throw new Error('Failed to save final answers');
                 }
