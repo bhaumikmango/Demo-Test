@@ -160,7 +160,7 @@ class MbtiResultModel(BaseModel):
 
 class CareerDetail(BaseModel):
     name: str
-    match_score: float = Field(..., ge=0.0, le=100.0)
+    match_score: str
     explanation: str
     competitive_exams: List[str]
     degree_courses: List[str]
@@ -188,188 +188,188 @@ def save_session_data(session_id: str, data: dict):
 
 # --- Assessment Questions (as a single string to be split) ---
 ASSESSMENT_QUESTIONS_RAW = """
-A) I enjoy solving complex logic puzzles. 
-B) I prefer brainstorming imaginative stories or ideas.
+ I enjoy solving complex logic puzzles. 
+ I prefer brainstorming imaginative stories or ideas.
 
-A) I make detailed plans before starting anything. 
-B) I go with the flow and adjust as I go.
+ I make detailed plans before starting anything. 
+ I go with the flow and adjust as I go.
 
-A) I can sense people’s emotions without them telling me. 
-B) I focus on facts and objective details in conversations.
+ I can sense people's emotions without them telling me. 
+ I focus on facts and objective details in conversations.
 
-A) I like taking the lead in group work. 
-B) I like supporting others without being in charge.
+ I like taking the lead in group work. 
+ I like supporting others without being in charge.
 
-A) I enjoy working with numbers and statistics. 
-B) I enjoy sketching, painting, or designing.
+ I enjoy working with numbers and statistics. 
+ I enjoy sketching, painting, or designing.
 
-A) I break problems into small, logical steps. 
-B) I think of multiple creative possibilities at once.
+ I break problems into small, logical steps. 
+ I think of multiple creative possibilities at once.
 
-A) I keep my workspace organized and tidy. 
-B) I’m comfortable working in slightly chaotic environments.
+ I keep my workspace organized and tidy. 
+ I'm comfortable working in slightly chaotic environments.
 
-A) I can tell when someone is upset even if they act fine. 
-B) I rely on evidence and data before deciding.
+ I can tell when someone is upset even if they act fine. 
+ I rely on evidence and data before deciding.
 
-A) I motivate and guide others toward a goal. 
-B) I work best by contributing my part to a shared goal.
+ I motivate and guide others toward a goal. 
+ I work best by contributing my part to a shared goal.
 
-A) I calculate budgets or expenses with ease. 
-B) I create visual concepts or artistic projects.
+ I calculate budgets or expenses with ease. 
+ I create visual concepts or artistic projects.
 
-A) I enjoy identifying patterns in data. 
-B) I enjoy experimenting with different artistic styles.
+ I enjoy identifying patterns in data. 
+ I enjoy experimenting with different artistic styles.
 
-A) I like planning events down to the smallest detail. 
-B) I like to keep plans loose and spontaneous.
+ I like planning events down to the smallest detail. 
+ I like to keep plans loose and spontaneous.
 
-A) I can comfort others when they’re stressed. 
-B) I assess situations logically without emotional influence.
+ I can comfort others when they're stressed. 
+ I assess situations logically without emotional influence.
 
-A) I enjoy persuading people toward my ideas. 
-B) I enjoy collaborating quietly toward common goals.
+ I enjoy persuading people toward my ideas. 
+ I enjoy collaborating quietly toward common goals.
 
-A) I like solving math-related problems. 
-B) I like designing visually appealing layouts.
+ I like solving math-related problems. 
+ I like designing visually appealing layouts.
 
-A) I quickly understand cause-and-effect in problems. 
-B) I enjoy thinking of alternative, unconventional solutions.
+ I quickly understand cause-and-effect in problems. 
+ I enjoy thinking of alternative, unconventional solutions.
 
-A) I prefer following a schedule daily. 
-B) I prefer changing my routine as needed.
+ I prefer following a schedule daily. 
+ I prefer changing my routine as needed.
 
-A) I easily empathize with characters in a story. 
-B) I focus on the author’s message and reasoning.
+ I easily empathize with characters in a story. 
+ I focus on the author's message and reasoning.
 
-A) I enjoy coordinating and delegating tasks. 
-B) I enjoy helping without taking credit.
+ I enjoy coordinating and delegating tasks. 
+ I enjoy helping without taking credit.
 
-A) I work well with formulas and equations. 
-B) I work well with images, colors, and patterns.
+ I work well with formulas and equations. 
+ I work well with images, colors, and patterns.
 
-A) I am drawn to solving scientific or technical problems. 
-B) I am drawn to artistic performances or exhibitions.
+ I am drawn to solving scientific or technical problems. 
+ I am drawn to artistic performances or exhibitions.
 
-A) I prepare checklists for my activities. 
-B) I handle tasks as they come without much prep.
+ I prepare checklists for my activities. 
+ I handle tasks as they come without much prep.
 
-A) I can often “read between the lines” in conversations. 
-B) I prefer to stick to what’s explicitly said.
+ I can often "read between the lines" in conversations. 
+ I prefer to stick to what's explicitly said.
 
-A) I enjoy being the spokesperson for a team. 
-B) I enjoy working behind the scenes.
+ I enjoy being the spokesperson for a team. 
+ I enjoy working behind the scenes.
 
-A) I feel energized when analyzing numerical trends. 
-B) I feel energized when creating unique designs.
+ I feel energized when analyzing numerical trends. 
+ I feel energized when creating unique designs.
 
-A) I like using logic to troubleshoot mechanical issues. 
-B) I like using creativity to reimagine how things could be.
+ I like using logic to troubleshoot mechanical issues. 
+ I like using creativity to reimagine how things could be.
 
-A) I prefer structured work environments. 
-B) I prefer open-ended, flexible environments.
+ I prefer structured work environments. 
+ I prefer open-ended, flexible environments.
 
-A) I respond compassionately when friends share problems. 
-B) I offer practical advice and solutions.
+ I respond compassionately when friends share problems. 
+ I offer practical advice and solutions.
 
-A) I naturally influence group decisions. 
-B) I naturally offer help where needed without leading.
+ I naturally influence group decisions. 
+ I naturally offer help where needed without leading.
 
-A) I’m comfortable calculating percentages and ratios. 
-B) I’m comfortable creating illustrations or visual content.
+ I'm comfortable calculating percentages and ratios. 
+ I'm comfortable creating illustrations or visual content.
 
-A) I think analytically when faced with challenges. 
-B) I think creatively when faced with challenges.
+ I think analytically when faced with challenges. 
+ I think creatively when faced with challenges.
 
-A) I plan projects step-by-step. 
-B) I like improvising in projects.
+ I plan projects step-by-step. 
+ I like improvising in projects.
 
-A) I can sense changes in someone’s mood. 
-B) I focus on measurable signs or proof.
+ I can sense changes in someone's mood. 
+ I focus on measurable signs or proof.
 
-A) I like public speaking to inspire others. 
-B) I like contributing through personal, quiet effort.
+ I like public speaking to inspire others. 
+ I like contributing through personal, quiet effort.
 
-A) I enjoy financial problem solving. 
-B) I enjoy visual arts.
+ I enjoy financial problem solving. 
+ I enjoy visual arts.
 
-A) I look for logical flaws in arguments. 
-B) I think about symbolic meaning and underlying themes.
+ I look for logical flaws in arguments. 
+ I think about symbolic meaning and underlying themes.
 
-A) I like mapping out long-term goals. 
-B) I like exploring options as they come.
+ I like mapping out long-term goals. 
+ I like exploring options as they come.
 
-A) I comfort friends in difficult times. 
-B) I offer straightforward, logical feedback.
+ I comfort friends in difficult times. 
+ I offer straightforward, logical feedback.
 
-A) I enjoy leading brainstorming sessions. 
-B) I enjoy refining and supporting existing ideas.
+ I enjoy leading brainstorming sessions. 
+ I enjoy refining and supporting existing ideas.
 
-A) I prefer working on spreadsheets. 
-B) I prefer working on visual presentations.
+ I prefer working on spreadsheets. 
+ I prefer working on visual presentations.
 
-A) I enjoy problem-solving in coding or science. 
-B) I enjoy choreographing, composing, or performing arts.
+ I enjoy problem-solving in coding or science. 
+ I enjoy choreographing, composing, or performing arts.
 
-A) I keep a strict calendar for tasks. 
-B) I allow room for spontaneous decisions.
+ I keep a strict calendar for tasks. 
+ I allow room for spontaneous decisions.
 
-A) I quickly sense group tensions. 
-B) I identify process inefficiencies.
+ I quickly sense group tensions. 
+ I identify process inefficiencies.
 
-A) I influence decisions in meetings. 
-B) I offer consistent team support.
+ I influence decisions in meetings. 
+ I offer consistent team support.
 
-A) I enjoy tracking budgets. 
-B) I enjoy conceptualizing marketing campaigns.
+ I enjoy tracking budgets. 
+ I enjoy conceptualizing marketing campaigns.
 
-A) I focus on practical solutions. 
-B) I focus on innovative possibilities.
+ I focus on practical solutions. 
+ I focus on innovative possibilities.
 
-A) I enjoy order and organization. 
-B) I enjoy change and adaptability.
+ I enjoy order and organization. 
+ I enjoy change and adaptability.
 
-A) I connect emotionally with others easily. 
-B) I evaluate situations with facts.
+ I connect emotionally with others easily. 
+ I evaluate situations with facts.
 
-A) I enjoy making executive decisions. 
-B) I enjoy providing resources for decision-makers.
+ I enjoy making executive decisions. 
+ I enjoy providing resources for decision-makers.
 
-A) I feel confident using mathematics in real life. 
-B) I feel confident creating visual concepts.
+ I feel confident using mathematics in real life. 
+ I feel confident creating visual concepts.
 
-A) I enjoy building or repairing things. 
-B) I enjoy imagining how things could be improved.
+ I enjoy building or repairing things. 
+ I enjoy imagining how things could be improved.
 
-A) I prefer following clear processes. 
-B) I prefer experimenting with new methods.
+ I prefer following clear processes. 
+ I prefer experimenting with new methods.
 
-A) I offer emotional comfort to friends. 
-B) I offer strategic solutions to friends.
+ I offer emotional comfort to friends. 
+ I offer strategic solutions to friends.
 
-A) I am persuasive in debates. 
-B) I am cooperative in team efforts.
+ I am persuasive in debates. 
+ I am cooperative in team efforts.
 
-A) I enjoy interpreting graphs and charts. 
-B) I enjoy creating storyboards and designs.
+ I enjoy interpreting graphs and charts. 
+ I enjoy creating storyboards and designs.
 
-A) I focus on step-by-step execution. 
-B) I focus on the bigger picture possibilities.
+ I focus on step-by-step execution. 
+ I focus on the bigger picture possibilities.
 
-A) I like consistent daily routines. 
-B) I like variety in my schedule.
+ I like consistent daily routines. 
+ I like variety in my schedule.
 
-A) I am sensitive to how others feel. 
-B) I am more focused on factual accuracy.
+ I am sensitive to how others feel. 
+ I am more focused on factual accuracy.
 
-A) I naturally guide group projects. 
-B) I naturally assist without leading.
+ I naturally guide group projects. 
+ I naturally assist without leading.
 
-A) I prefer accounting and record-keeping tasks. 
-B) I prefer creative marketing or design tasks.
+ I prefer accounting and record-keeping tasks. 
+ I prefer creative marketing or design tasks.
 """
 
-student_name = ''
+student_name1 = ''
 
 def get_paged_questions(page_num, questions_per_page=12):
     questions_list = ASSESSMENT_QUESTIONS_RAW.strip().split('\n\n')
@@ -485,8 +485,9 @@ def result():
     
     raw_suggestion_plain_text = session.get('raw_suggestion_plain_text', '')
 
-    global student_name 
+    global student_name1 
     student_name = session_data.get('student_name', 'Student')
+    student_name1 = student_name
 
     return render_template(
         'result.html',
@@ -549,7 +550,7 @@ As you embark on this journey of self-discovery and academic exploration, we inv
     pdf.ln(10) 
 
     intro2=f"""
-    Dear {student_name},
+    Dear {student_name1},
     """
     pdf.set_font('DejaVuSansCondensed', 'B', 11)
     pdf.multi_cell(page_width, 5, intro2.strip()) 
@@ -627,7 +628,7 @@ What if there were a structured and objective way to evaluate how well your natu
         pdf.ln(2)
         
         pdf.set_font('DejaVuSansCondensed', 'B', 12)
-        pdf.multi_cell(0, 5, f"{career.name} ({career.match_score:.1f}% Match)")
+        pdf.multi_cell(0, 5, f"{career.name} ({career.match_score})")
     
         pdf.set_font('DejaVuSansCondensed', '', 10)
         explanation_plain = re.sub(r'[\*_`]', '', career.explanation)
@@ -755,43 +756,47 @@ def generate_prompt(session_data: dict) -> str:
     ])
     
     prompt = f"""
-    You are a career guidance expert for high school students.
-    Based on the following information, generate a personalized career suggestion for Indian students in a specific JSON format.
-    Also, analyze the assessment answers to determine the student's MBTI personality type. Include the MBTI type, a detailed explanation, and one-word strengths and weaknesses in the output.
+You are a career guidance expert for high school students.
+Based on the following information, generate a personalized career suggestion for Indian students in a specific JSON format.
+Also, analyze the assessment answers to determine the student's MBTI personality type. Include the MBTI type, a detailed explanation, and one-word strengths and weaknesses in the output.
     
-    ### Student Profile
-    - **High School Subjects:** {graduation_subjects}
-    - **Calculated Personality Traits:** {personality_summary}
-    - **Assessment Answers:**
-    {selected_options}
-    - **Preferred Career Field (if any):** {preferred_field}
-    - **Requested Tone:** Professional
+### Student Profile
+- **High School Subjects:** {graduation_subjects}
+- **Calculated Personality Traits:** {personality_summary}
+- **Assessment Answers:**
+{selected_options}
+- **Preferred Career Field (if any):** {preferred_field}
+- **Requested Response Tone:** Professional
 
-    ### Task
-    Provide a JSON object with the following structure. Do not include any text(or code) before or after the JSON object. The JSON should be a single, valid block.
+### Task:
+1. Return ONLY valid JSON - no trailing commas, code or text in the output
+2. No text before or after the JSON object and the JSON object should be a single, valid block
+3. All strings must be properly escaped
 
-    {{
-    "mbti_result": {{
-    "type": "ENTJ->The Commander (Extroverted, Intuitive, Thinking, Judging)",
+### Required JSON Structure:
+{{
+  "mbti_result": {{
+    "type": "ENTJ - The Commander",
     "explanation": "A detailed explanation (around 400 words) of the MBTI type based on the selected assessment options and calculated traits. This should describe the user's personality traits, preferences, and natural inclinations and the text should use markdown for formatting.",
     "strengths": ["Analytical", "Strategic", "Independent", "Organized", "Focused"],
-    "weaknesses": ["Stubborn", "Critical", "Insensitive", "Judgmental", "Overthinking"]
-    }},
-    "career_alignments": [
+    "weaknesses": ["Stubborn", "Critical", "Impatient", "Perfectionist", "Overthinking"]
+  }},
+  "career_alignments": [
     {{
-    "name": "CareerName1",
-    "match_score": 90.5,
-    "explanation": "A detailed explanation (of about 250 words) of why this career is a good fit, linking it to the user's calculated traits and don't use the subjects as the top priority for the suggestion, if a person's traits are matching with a different domain of study then suggest them that as well. This text should use markdown for formatting.",
-    "competitive_exams": ["Exam A", "Exam B"],
-    "degree_courses": ["Course X", "Course Y"]
-    }},
-    ... (generate exactly 8 career objects in this list)
-    ],
-    "clarity_and_impact": "A detailed paragraph explaining the clarity and impact of these career choices, and what the student can expect to achieve at the end of their careers. This text should use markdown for formatting.",
+      "name": "Fashion Designer",
+      "match_score": (if the match_score is more than 80 return "Highly Aligned", else if the match_score between 80 to 60 return "Well Aligned", else if the match_score is less than 60 return "Decently Aligned"),
+      "explanation": "A detailed explanation (of about 250 words) of why this career domain is a good fit, linking it to the user's calculated traits and don't use the subjects as the top priority for the suggestion, if a person's traits are matching with a different domain of study other than the subjects they have uptook in high school then suggest them that as well. This text should use markdown for formatting.",
+      "competitive_exams": ["NIFT Entrance Exam", "NID DAT", "UCEED"],
+      "degree_courses": ["B.Des. Fashion Design", "B.F.Tech", "B.A. in fashion design"]
     }}
+    ... (generate exactly 8 career objects in this list)
+  ],
+  "clarity_and_impact": "A detailed paragraph (of about 400 words) explaining the clarity and impact of these career choices, and what the student can expect to achieve at the end of their careers and if their preferred career field is not aligning with their behaviour then tell them why they should try their hands in the above given career suggestions. This text should use markdown for formatting."
+}}
 
-    The response must be a single, complete JSON object.
-    """
+Ensure no trailing commas anywhere in the JSON.
+Focus on Indian education system, competitive exams, and degree courses.
+"""
     
     return prompt
 
